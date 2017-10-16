@@ -12,7 +12,19 @@ class RequestCreationTests(TestCase):
 
 	def test_uri_must_be_str(self):
 		with self.assertRaises(TypeError):
-			request = Request(100)
+			Request(100)
+
+
+	def test_can_create_request_with_method(self):
+		request = Request("/path/to/resource/", method="POST")
+		self.assertEqual(request._method, "POST")
+		request = Request("/path/to/resource/", method="put")
+		self.assertEqual(request._method, "PUT")
+
+
+	def test_method_must_be_str(self):
+		with self.assertRaises(TypeError):
+			Request("/path/to/resource/", method=100)
 
 
 
@@ -34,3 +46,26 @@ class RequestUriTests(TestCase):
 		request = Request("/path/to/resource/")
 		with self.assertRaises(TypeError):
 			request.uri = 1000
+
+
+
+class RequestMethodTests(TestCase):
+
+	def test_method_property(self):
+		request = Request("/path/to/resource/")
+		self.assertIs(request._method, request.method)
+
+
+	def test_can_update_method(self):
+		request = Request("/path/to/resource/")
+		self.assertEqual(request.method, "GET")
+		request.method = "POST"
+		self.assertEqual(request._method, "POST")
+		request.method = "delete"
+		self.assertEqual(request._method, "DELETE")
+
+
+	def test_method_must_be_str(self):
+		request = Request("/path/to/resource/")
+		with self.assertRaises(TypeError):
+			request.method = 1000
