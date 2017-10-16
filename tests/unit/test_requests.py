@@ -6,8 +6,9 @@ class RequestCreationTests(TestCase):
 
 	def test_can_create_request(self):
 		request = Request("/path/to/resource/")
-		self.assertEqual(request._method, "GET")
 		self.assertEqual(request._uri, "/path/to/resource/")
+		self.assertEqual(request._method, "GET")
+		self.assertEqual(request._headers, {})
 
 
 	def test_uri_must_be_str(self):
@@ -25,6 +26,11 @@ class RequestCreationTests(TestCase):
 	def test_method_must_be_str(self):
 		with self.assertRaises(TypeError):
 			Request("/path/to/resource/", method=100)
+
+
+	def test_can_create_request_with_headers(self):
+		request = Request("/path/to/resource/", headers={"Host": "www.cat.com"})
+		self.assertEqual(request._headers, {"Host": "www.cat.com"})
 
 
 
@@ -69,3 +75,18 @@ class RequestMethodTests(TestCase):
 		request = Request("/path/to/resource/")
 		with self.assertRaises(TypeError):
 			request.method = 1000
+
+
+
+class RequestHeadersTests(TestCase):
+
+	def test_headers_property(self):
+		request = Request("/path/to/resource/", headers={"Host": "www.cat.com"})
+		self.assertEqual(request._headers, request.headers)
+		self.assertIsNot(request._headers, request.headers)
+
+
+	def test_headers_property_is_immutable(self):
+		request = Request("/path/to/resource/", headers={"Host": "www.cat.com"})
+		with self.assertRaises(AttributeError):
+			request.headers = {}
