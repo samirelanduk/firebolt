@@ -34,6 +34,14 @@ class RequestCreationTests(TestCase):
 
 
 
+class RequestReprTests(TestCase):
+
+	def test_request_repr(self):
+		request = Request("/path/to/resource/", method="POST")
+		self.assertEqual(str(request), "<POST Request: '/path/to/resource/'>")
+
+
+
 class RequestUriTests(TestCase):
 
 	def test_uri_property(self):

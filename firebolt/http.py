@@ -20,6 +20,10 @@ class Request:
         self._headers = {} if headers is None else headers
 
 
+    def __repr__(self):
+        return "<{} Request: '{}'>".format(self._method, self._uri)
+
+
     @property
     def uri(self):
         """The Uniform Resource Identifier - the string that points to the
@@ -59,5 +63,5 @@ class Request:
         """The HTTP headers of the request, as a ``dict``
 
         :rtype: ``dict``"""
-        
+
         return dict(self._headers)
