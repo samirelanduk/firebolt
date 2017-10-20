@@ -1,7 +1,7 @@
 """The HTTP module - contains Request and Response functionality."""
 
 class Request:
-    """A HTTP Request.
+    """A HTTP Request. Headers are accessed via indexing.
 
     :param str uri: The URI of the request.
     :param str method: The HTTP method of the request. Will be converted to\
@@ -22,6 +22,14 @@ class Request:
 
     def __repr__(self):
         return "<{} Request: '{}'>".format(self._method, self._uri)
+
+
+    def __getitem__(self, key):
+        return self._headers[key]
+
+
+    def __setitem__(self, key, value):
+        self._headers[key] = value
 
 
     @property

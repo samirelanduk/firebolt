@@ -42,6 +42,31 @@ class RequestReprTests(TestCase):
 
 
 
+class RequestIndexingTests(TestCase):
+
+	def test_request_index_gets_headers(self):
+		request = Request("/path/to/resource/", headers={"Host": "www.cat.com"})
+		self.assertEqual(request["Host"], "www.cat.com")
+
+
+
+class RequestIndexSettingTests(TestCase):
+
+	def test_can_alter_headers(self):
+		request = Request("/path/to/resource/", headers={"Host": "www.cat.com"})
+		request["Host"] = "www.dog.com"
+		self.assertEqual(request._headers, {"Host": "www.dog.com"})
+
+
+	def test_can_make_headers(self):
+		request = Request("/path/to/resource/", headers={"Host": "www.cat.com"})
+		request["Accept"] = "text/plain"
+		self.assertEqual(
+		 request._headers, {"Host": "www.cat.com", "Accept": "text/plain"}
+		)
+
+
+
 class RequestUriTests(TestCase):
 
 	def test_uri_property(self):
