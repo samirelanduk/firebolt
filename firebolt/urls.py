@@ -1,4 +1,4 @@
-
+import re
 
 class UrlMatcher:
     """A URL matcher takes a URL and returns a responder, using a lookup table.
@@ -22,3 +22,10 @@ class UrlMatcher:
 
     def __repr__(self):
         return "<UrlMatcher (patterns: {})>".format(len(self._lookup))
+
+
+    def __call__(self, url):
+        for match in self._lookup:
+            pattern = match[0].replace("/", "\/")
+            if re.match(pattern, url):
+                return match[1]
