@@ -1,6 +1,6 @@
 from unittest import TestCase
 from unittest.mock import Mock, patch
-from firebolt.http import Request
+from firebolt.http import Request, environ_to_request
 
 class RequestCreationTests(TestCase):
 
@@ -123,3 +123,18 @@ class RequestHeadersTests(TestCase):
 		request = Request("/path/to/resource/", headers={"Host": "www.cat.com"})
 		with self.assertRaises(AttributeError):
 			request.headers = {}
+
+
+
+class EnvironmentToRequestTests(TestCase):
+
+	@patch("firebolt.http.Request")
+	def test_can_get_request_from_envirnment(self, mock_request):
+		mock_request.return_value = "REQUEST"
+		environ = {
+		 "REQUEST_METHOD": "POST",
+		 "PATH_INFO": "/path/"
+		}
+		request = environ_to_request(environ)
+		mock_request.assert_called_with("/path/", "POST")
+		self.assertEqual(request, "REQUEST")

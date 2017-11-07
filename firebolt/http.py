@@ -73,3 +73,14 @@ class Request:
         :rtype: ``dict``"""
 
         return dict(self._headers)
+
+
+def environ_to_request(environ):
+    """Takes a WSGI environment ``dict`` and converts into a firebolt
+    :py:class:`.Request`
+
+    :param dict environ: The WSGI environment variables.
+    :rtype: ``Request``"""
+    
+    request = Request(environ["PATH_INFO"], environ["REQUEST_METHOD"])
+    return request
