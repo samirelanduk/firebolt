@@ -3,7 +3,7 @@ import os
 
 if sys.argv[1] == "server":
     from wsgiref.simple_server import make_server
-    from app import application
+    from wsgi import application
     with make_server("", 8023, application) as server:
         print("Serving on port 8023...")
         server.serve_forever()
