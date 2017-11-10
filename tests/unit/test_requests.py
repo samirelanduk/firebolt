@@ -76,7 +76,7 @@ class RequestUriTests(TestCase):
 
 	def test_can_update_uri(self):
 		request = Request("/path/to/resource/")
-		self.assertEqual(request.uri, "/path/to/resource/")
+		self.assertEqual(request._uri, "/path/to/resource/")
 		request.uri = "/path2/"
 		self.assertEqual(request._uri, "/path2/")
 

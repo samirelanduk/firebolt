@@ -112,6 +112,70 @@ class Response:
         return "<Response ({})>".format(self._status_code)
 
 
+    @property
+    def body(self):
+        """The body of the HTTP response
+
+        :rtype: ``bytes``"""
+
+        return self._body
+
+
+    @body.setter
+    def body(self, body):
+        if not isinstance(body, bytes):
+            raise TypeError("Response body {} is not bytes".format(body))
+        self._body = body
+
+
+    @property
+    def status_code(self):
+        """The status code of the HTTP Response. Updating it will also update
+        the reason_phrase.
+
+        :rtype: ``int``"""
+
+        return self._status_code
+
+
+    @status_code.setter
+    def status_code(self, status_code):
+        if not isinstance(status_code, int):
+            raise TypeError("Status code {} is not int".format(status_code))
+        self._status_code = status_code
+        try:
+            self._reason_phrase = Response.PHRASES[status_code]
+        except KeyError:
+            raise ValueError(
+             "{} is not a valid HTTP Response status".format(status_code)
+            )
+
+
+    @property
+    def reason_phrase(self):
+        """The short message describing the reason for the status code.
+
+        :rtype: ``str``"""
+
+        return self._reason_phrase
+
+
+    @reason_phrase.setter
+    def reason_phrase(self, reason_phrase):
+        if not isinstance(reason_phrase, str):
+            raise TypeError(("phrase {} is not str".format(reason_phrase)))
+        self._reason_phrase = reason_phrase
+
+
+    @property
+    def headers(self):
+        """The HTTP headers of the response, as a ``dict``
+
+        :rtype: ``dict``"""
+
+        return dict(self._headers)
+
+
     PHRASES = {
      100: "Continue", 101: "Switching Protocols", 200: "OK", 201: "Created",
      202: "Accepted", 203: "Non-Authoritative Information", 204: "No Content",
