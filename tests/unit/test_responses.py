@@ -62,6 +62,31 @@ class ResponseReprTests(TestCase):
 
 
 
+class ResponseIndexingTests(TestCase):
+
+	def test_request_index_gets_headers(self):
+		response = Response(b"<html>Hello</html>", headers={"Content-Length": "348"})
+		self.assertEqual(response["Content-Length"], "348")
+
+
+
+class RequestIndexSettingTests(TestCase):
+
+	def test_can_alter_headers(self):
+		response = Response(b"<html>Hello</html>", headers={"Content-Length": "348"})
+		response["Content-Length"] = "101"
+		self.assertEqual(response._headers, {"Content-Length": "101"})
+
+
+	def test_can_make_headers(self):
+		response = Response(b"<html>Hello</html>", headers={"Content-Length": "348"})
+		response["Vary"] = "Accept-Language"
+		self.assertEqual(
+		 response._headers, {"Content-Length": "348", "Vary": "Accept-Language"}
+		)
+
+
+
 class ResponseBodyTests(TestCase):
 
     def test_body_property(self):

@@ -112,6 +112,14 @@ class Response:
         return "<Response ({})>".format(self._status_code)
 
 
+    def __getitem__(self, key):
+        return self._headers[key]
+
+
+    def __setitem__(self, key, value):
+        self._headers[key] = value
+
+
     @property
     def body(self):
         """The body of the HTTP response
