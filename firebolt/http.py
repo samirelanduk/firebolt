@@ -79,16 +79,58 @@ class Request:
 class Response:
     """A HTTP Request. Headers are accessed via indexing.
 
-    :param bytes body: The Response body."""
+    :param bytes body: The Response body.
+    :param int status_code: The Response status code.
+    :param str reason_phrase: The Response reason phrase.
+    :raises TypeError: if the body is not bytes.
+    :raises TypeError: if the status code is not int.
+    :raises TypeError: if the reason phrase is not str.
+    :raises ValueError: if the status code is not a valid HTTP status code."""
 
-
-    def __init__(self, body):
+    def __init__(self, body, status_code=200, reason_phrase=None):
         if not isinstance(body, bytes):
             raise TypeError("Response body {} is not bytes".format(body))
+        if not isinstance(status_code, int):
+            raise TypeError("Status code {} is not an int".format(status_code))
+        if reason_phrase is not None and not isinstance(reason_phrase, str):
+            raise TypeError("Phrase {} is not a string".format(reason_phrase))
         self._body = body
-        self._status_code = 200
-        self._reason_phrase = "OK"
+        self._status_code = status_code
+        try:
+            self._reason_phrase = Response.PHRASES[status_code]
+        except KeyError:
+            raise ValueError(
+             "{} is not a valid HTTP Response status".format(status_code)
+            )
+        if reason_phrase:
+            self._reason_phrase = reason_phrase
         self._headers = {}
+
+
+    PHRASES = {
+     100: "Continue", 101: "Switching Protocols", 200: "OK", 201: "Created",
+     202: "Accepted", 203: "Non-Authoritative Information", 204: "No Content",
+     205: "Reset Content", 206: "Partial Content", 207: "Multi-Status",
+     226: "IM Used", 300: "Multiple Choices", 301: "Moved Permanently",
+     302: "Found", 303: "See Other", 304: "Not Modified", 305: "Use Proxy",
+     307: "Temporary Redirect", 400: "Bad Request", 401: "Unauthorized",
+     402: "Payment Required", 403: "Forbidden", 404: "Not Found",
+     405: "Method Not Allowed", 406: "Not Acceptable",
+     407: "Proxy Authentication Required", 408: "Request Time-out",
+     409: "Conflict", 410: "Gone", 411: "Length Required",
+     412: "Precondition Failed", 413: "Request Entity Too Large",
+     414: "Request-URI Too Large", 415: "Unsupported Media Type",
+     416: "Requested range not satisfiable", 417: "Expectation Failed",
+     418: "I'm a teapot", 422: "Unprocessable Entity", 423: "Locked",
+     424: "Failed Dependency", 425: "Unordered Collection",
+     426: "Upgrade Required", 444: "No Response", 449: "Retry With",
+     450: "Blocked by Windows Parental Controls", 499: "Client Closed Request",
+     500: "Internal Server Error", 501: "Not Implemented", 502: "Bad Gateway",
+     503: "Service Unavailable", 504: "Gateway Time-out",
+     505: "HTTP Version not supported", 506: "Variant Also Negotiates",
+     507: "Insufficient Storage", 509: "Bandwidth Limit Exceeded",
+     510: "Not Extended"
+    }
 
 
 
