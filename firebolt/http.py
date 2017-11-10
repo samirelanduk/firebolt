@@ -108,6 +108,10 @@ class Response:
         self._headers = {} if headers is None else headers
 
 
+    def __repr__(self):
+        return "<Response ({})>".format(self._status_code)
+
+
     PHRASES = {
      100: "Continue", 101: "Switching Protocols", 200: "OK", 201: "Created",
      202: "Accepted", 203: "Non-Authoritative Information", 204: "No Content",

@@ -51,3 +51,11 @@ class ResponseCreationTests(TestCase):
     def test_can_create_response_with_headers(self):
         response = Response(b"<html>Hello</html>", headers={"Content-Length": "348"})
         self.assertEqual(response._headers, {"Content-Length": "348"})
+
+
+
+class ResponseReprTests(TestCase):
+
+    def test_response_repr(self):
+        response = Response(b"<html>Hello</html>")
+        self.assertEqual(str(response), "<Response (200)>")
