@@ -8,9 +8,15 @@ def create_application(url_matcher):
     def application(environment, start_response):
         request = environ_to_request(environment)
         responder = url_matcher(request.uri)
-        start_response(
-         "200 OK", [('Content-type', 'text/plain; charset=utf-8')]
-        )
-        if responder: return responder(request)
-        return [b"404"]
+        if responder:
+            response = responder(request)
+            start_response(
+             "{} {}".format(response.status_code, response.reason_phrase),
+             [(key, response.headers[key]) for key in response.headers]
+            )
+            return response.body.split(b"\n")
+        else:
+            start_response("200 OK", [('Content-type', 'text/html; charset=utf-8')])
+            return [b"Hi"]
+
     return application
