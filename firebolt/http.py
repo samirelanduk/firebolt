@@ -75,12 +75,29 @@ class Request:
         return dict(self._headers)
 
 
+
+class Response:
+    """A HTTP Request. Headers are accessed via indexing.
+
+    :param bytes body: The Response body."""
+
+
+    def __init__(self, body):
+        if not isinstance(body, bytes):
+            raise TypeError("Response body {} is not bytes".format(body))
+        self._body = body
+        self._status_code = 200
+        self._reason_phrase = "OK"
+        self._headers = {}
+
+
+
 def environ_to_request(environ):
     """Takes a WSGI environment ``dict`` and converts into a firebolt
     :py:class:`.Request`
 
     :param dict environ: The WSGI environment variables.
     :rtype: ``Request``"""
-    
+
     request = Request(environ["PATH_INFO"], environ["REQUEST_METHOD"])
     return request
