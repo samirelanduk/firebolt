@@ -46,3 +46,8 @@ class ResponseCreationTests(TestCase):
     def test_reason_phrase_must_be_str(self):
         with self.assertRaises(TypeError):
             Response(b"<html>Hello</html>", reason_phrase=1.1)
+
+
+    def test_can_create_response_with_headers(self):
+        response = Response(b"<html>Hello</html>", headers={"Content-Length": "348"})
+        self.assertEqual(response._headers, {"Content-Length": "348"})

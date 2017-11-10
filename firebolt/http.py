@@ -82,12 +82,13 @@ class Response:
     :param bytes body: The Response body.
     :param int status_code: The Response status code.
     :param str reason_phrase: The Response reason phrase.
+    :param dict headers: The headers as key-value pairs.
     :raises TypeError: if the body is not bytes.
     :raises TypeError: if the status code is not int.
     :raises TypeError: if the reason phrase is not str.
     :raises ValueError: if the status code is not a valid HTTP status code."""
 
-    def __init__(self, body, status_code=200, reason_phrase=None):
+    def __init__(self, body, status_code=200, reason_phrase=None, headers=None):
         if not isinstance(body, bytes):
             raise TypeError("Response body {} is not bytes".format(body))
         if not isinstance(status_code, int):
@@ -104,7 +105,7 @@ class Response:
             )
         if reason_phrase:
             self._reason_phrase = reason_phrase
-        self._headers = {}
+        self._headers = {} if headers is None else headers
 
 
     PHRASES = {
